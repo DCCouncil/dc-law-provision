@@ -1,0 +1,4 @@
+# http://docs.ansible.com/playbooks_intro.html#handlers-running-operations-on-change
+
+- name: restart nginx
+  service: name=nginx state=restarted

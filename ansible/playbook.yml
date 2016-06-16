@@ -1,0 +1,13 @@
+# http://docs.ansible.com/playbooks_roles.html#playbook-roles-and-include-statements
+- hosts:
+    - dev
+    - production
+  gather_facts: no
+  roles:
+    - {role: security, sudo: yes}
+- hosts:
+    - all
+  gather_facts: no
+  roles:
+    - {role: nginx, sudo: yes}
+    - {role: elasticsearch, sudo: yes}

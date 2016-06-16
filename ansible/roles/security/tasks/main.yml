@@ -1,0 +1,11 @@
+# http://docs.ansible.com/playbooks_intro.html#tasks-list
+
+- name: open ports in firewall
+  ufw: rule=allow port={{ item }}
+  with_items:
+    - 22
+    - 80
+    - 443
+
+- name: enable firewall
+  ufw: state=enabled

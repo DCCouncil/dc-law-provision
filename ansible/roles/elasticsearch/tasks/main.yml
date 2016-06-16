@@ -1,0 +1,39 @@
+# http://docs.ansible.com/playbooks_intro.html#tasks-list
+- name: add elasticsearch key
+  apt_key: url=https://packages.elastic.co/GPG-KEY-elasticsearch state=present
+
+- name: add elasticsearch repository
+  apt_repository: repo='deb https://packages.elastic.co/elasticsearch/2.x/debian stable main' state=present
+
+- name: install elasticsearch and dependencies
+  apt: name={{item}}
+  with_items:
+    - openjdk-8-jre-headless
+    - elasticsearch
+    - python-pip
+
+- name: add templates
+  copy: src=search.mustache dest=/etc/elasticsearch/scripts/search.mustache
+  notify: restart elasticsearch
+
+- name: ensure cors is enabled
+  lineinfile: "dest=/etc/elasticsearch/elasticsearch.yml line='{{item}}'"
+  with_items:
+    - "http.cors.enabled: true"
+    - 'http.cors.allow-origin: "*"'
+  notify: restart elasticsearch
+
+- name: ensure elasticsearch is running, starts at boot
+  service: name=elasticsearch state=started enabled=yes
+
+- name: install pip requirements
+  pip: name=universalclient
+
+- name: copy over index script
+  copy: src=index.py dest=/opt/index.py owner=root mode=0700
+
+- name: copy schema
+  copy: src=schema.json dest=/opt/schema.json owner=root
+
+- name: run index script every five minutes
+  cron: name="index code" minute="*/5" job="/opt/index.py > /var/log/index.log"

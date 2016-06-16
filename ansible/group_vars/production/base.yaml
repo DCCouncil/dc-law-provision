@@ -1,0 +1,6 @@
+# docs.ansible.com/playbooks_variables.html
+production: yes
+ssl: 
+  cert: '{{private.ssl.cert}}'
+  key: '{{private.ssl.key}}'
+  chain: '{{private.ssl.chain}}'

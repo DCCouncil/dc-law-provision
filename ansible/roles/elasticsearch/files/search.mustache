@@ -1,0 +1,31 @@
+{
+  "from": {{from}}{{^from}}0{{/from}},
+  "size": 5,
+  "query": {
+    "simple_query_string": {
+      "fields": ["num", "title", "body"],
+      "query": "{{query_string}}"
+    }
+  },
+  "_source": {
+    "include": ["url", "title"]
+  },
+  "highlight": {
+    "pre_tags": [
+      "<mark>"
+    ],
+    "post_tags": [
+      "</mark>"
+    ],
+    "fields": {
+      "body": {
+        "number_of_fragments" : 1,
+        "fragment_size" : 60,
+        "no_match_size": 60
+      },
+      "title": {
+        "number_of_fragments": 0
+      }
+    }
+  }
+}
