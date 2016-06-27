@@ -21,6 +21,9 @@
   with_items:
     - "http.cors.enabled: true"
     - 'http.cors.allow-origin: "*"'
+    - "http.cors.allow-methods: OPTIONS, POST"
+    - 'http.cors.allow-headers: "X-Requested-With, X-Auth-Token, Content-Type, Content-Length, Authorization"'
+
   notify: restart elasticsearch
 
 - name: ensure elasticsearch is running, starts at boot
